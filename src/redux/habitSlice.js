@@ -1,26 +1,50 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  habits: [],
+const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('habits');
+    if (serializedState === null) {
+      return [];
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return [];
+  }
 };
 
+const saveState = (state) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('habits', serializedState);
+  } catch {
+    // Ignore write errors.
+  }
+};
 
-const habitSlice = createSlice({
+const habitsSlice = createSlice({
   name: 'habits',
-  initialState,
+  initialState: loadState(),
   reducers: {
     addHabit: (state, action) => {
-      state.habits.push({ id: Date.now(), name: action.payload, status: Array(7).fill('none') });
+      const newState = [...state, action.payload];
+      saveState(newState);
+      return newState;
     },
     updateHabitStatus: (state, action) => {
-      const { id, day, status } = action.payload;
-      const habit = state.habits.find(habit => habit.id === id);
+      const { id, statuses } = action.payload;
+      const habit = state.find(habit => habit.id === id);
       if (habit) {
-        habit.status[day] = status;
+        habit.statuses = statuses;
+        saveState(state);
       }
     },
+    deleteHabit: (state, action) => {
+      const newState = state.filter(habit => habit.id !== action.payload);
+      saveState(newState);
+      return newState;
+    }
   },
 });
 
-export const { addHabit, updateHabitStatus } = habitSlice.actions;
-export default habitSlice.reducer;
+export const { addHabit, updateHabitStatus, deleteHabit } = habitsSlice.actions;
+export default habitsSlice.reducer;
