@@ -27,6 +27,7 @@ const Header = () => {
       {showUpdatePopup && (
           <AddHabits onClose =  {handleClosePopup}/>
       )}
+      
     </>
   );
 };
