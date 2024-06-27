@@ -7,8 +7,10 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider store={store}> 
-    <App />
+    {/* Provider component to make the Redux store available to the app */}
+    <Provider store={store}>
+      {/* Main App component */}
+      <App />
     </Provider>
   </React.StrictMode>,
 )

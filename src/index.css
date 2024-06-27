@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Apply bg-color black to body */
 *{
     background: #020202;
 }
